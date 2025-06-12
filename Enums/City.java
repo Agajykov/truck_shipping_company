@@ -1,7 +1,7 @@
-package enums;
+package Enums;
 
 public enum City {
-
+	HAMBURG(0),
 	BERLIN(289),
 	MUNICH(778),
 	LEIPZIG(396),

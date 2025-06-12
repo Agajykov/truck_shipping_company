@@ -1,16 +1,16 @@
-package distance;
+package Distance;
 
+import Orders.Order;
+import Tanker.Truck;
+import Tanks.Item;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import orders.Order;
-import tanker.Truck;
-import tanks.Item;
 
 public class Calculation {
 
 	// return cost/km
-	public static final double returnPrice = 0.6;
+	public static final double RETURN_COST_PER_KM = 0.6;
 
 	private List<Item> items = new ArrayList<>();
 	private List<Order> orders = new ArrayList<>();
@@ -58,7 +58,7 @@ public class Calculation {
 		double cost = order.getGallonAmmount() * 0.01 * (1 + risk) * order.getCityToShip().getDistance();
 
 		// Return cost (empty truck)
-		double returnCost = order.getCityToShip().getDistance() * returnPrice;
+		double returnCost = order.getCityToShip().getDistance() * RETURN_COST_PER_KM;
 
 		return cost + returnCost;
 	}

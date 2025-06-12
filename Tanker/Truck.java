@@ -5,11 +5,15 @@ public class Truck {
     private int length;
 	private double radius;
 	private double volumeInCubicMeter;
-
-    public double getVolumeInCubicMeter() {
-		this.volumeInCubicMeter =	Math.PI * Math.pow(this.radius, 2) * this.length;
+	
+	public void updateVolume() {
+		this.volumeInCubicMeter = Math.PI * Math.pow(this.radius, 2) * this.length;
+	}
+    
+	public double getVolumeInCubicMeter() {
 		return this.volumeInCubicMeter;
 	}
+
 
 	public int getLength() {
 		return length;

@@ -1,4 +1,4 @@
-package tanks;
+package Tanks;
 
 /**
  * Represents an item (usually a liquid or gas) that can be transported by a tanker truck.

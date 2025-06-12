@@ -1,11 +1,13 @@
-import distance.Calculation;
-import enums.City;
+import Distance.Calculation;
+import Enums.City;
+import Exceptions.CityNotFoundException;
+import Exceptions.ItemNotFoundException;
+import Orders.Order;
+import Tanker.Truck;
+import Tanks.Item;
+import Tanks.Liquid;
+import Validation.Validation;
 import java.util.Scanner;
-import orders.Order;
-import tanker.Truck;
-import tanks.Item;
-import tanks.Liquid;
-import validation.Validation;
 
 
 public class Main {
@@ -91,29 +93,51 @@ public class Main {
 			carbonDioxide,
 			methane
 			);
+
+
+		
 		
 		Scanner scanner = new Scanner(System.in);
 
-		System.out.println("Provide ammount of gallons:");
-		final int gallonAmmount = scanner.nextInt();
+		boolean isOrderComplete = false;
 
-		System.out.println("Provide Item to be shipped:");
-		final String item = scanner.nextLine();
-		
-		Item itemToBeShipped = Validation.toItem(item, calc.getItems());
-		
-		System.out.println("Provide destination City:");
-		final String destinationCity = scanner.nextLine();
-		City city = Validation.toCityEnum(destinationCity);
+	while (!isOrderComplete) {
+		System.out.print("Provide amount of gallons: ");
+		int gallonAmount = Integer.parseInt(scanner.nextLine());
 
-		Order order = new Order(gallonAmmount, itemToBeShipped, city);
+		System.out.print("Provide Item to be shipped: ");
+		String itemName = scanner.nextLine().trim();
 
+		System.out.print("Provide destination City: ");
+		String destinationCity = scanner.nextLine().trim();
+
+		Item itemToBeShipped;
+		try {
+			itemToBeShipped = Validation.toItem(itemName, calc.getItems());
+		} catch (ItemNotFoundException e) {
+			System.err.println(e.getMessage());
+			continue; // skip this order and ask again
+		}
+
+		City city;
+		try {
+			city = Validation.toCityEnum(destinationCity);
+		} catch (CityNotFoundException e) {
+			System.err.println(e.getMessage());
+			continue;
+		}
+
+		Order order = new Order(gallonAmount, itemToBeShipped, city);
 		calc.addOrder(order);
-        
 
-        // Print example cost
-        double cost = calc.shippingPrice(order);
+		// Optionally, show cost for each added order
+		double cost = calc.shippingPrice(order);
+		System.out.println("Shipping Cost: " + cost + " Euros");
+
+		System.out.print("Do you want to finish ordering? (yes/no): ");
+		String response = scanner.nextLine().trim().toLowerCase();
+		isOrderComplete = response.equals("yes") || response.equals("y");
+	}
 		calc.printOrder();
-        System.out.println("Shipping Cost: " + cost + " Euros");
     }
 }
