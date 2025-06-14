@@ -1,21 +1,33 @@
-package tanker;
+package Tanker;
 
 public class Truck {
-
-    private int length;
+	private String name;
+    private double length;
 	private double radius;
 	private double volumeInCubicMeter;
+	private double maxWeight;
 	
-	public void updateVolume() {
-		this.volumeInCubicMeter = Math.PI * Math.pow(this.radius, 2) * this.length;
+	public void calculateVolume() {
+		double volume = Math.PI * Math.pow(this.radius, 2) * this.length;
+		this.volumeInCubicMeter = volume;
 	}
     
-	public double getVolumeInCubicMeter() {
-		return this.volumeInCubicMeter;
+	public String getName() {
+		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
 
-	public int getLength() {
+	public double getTruckVolumeInCubicMeter() {
+		if (this.volumeInCubicMeter == 0.0) {
+       		calculateVolume();
+    	}
+    	return this.volumeInCubicMeter;
+	}
+
+	public double getLength() {
 		return length;
 	}
 
@@ -31,9 +43,18 @@ public class Truck {
 		this.radius = radius;
 	}
 
-    public void printTruckInfo() {
-        System.out.println("Truck length:" + length + "\n Truck Radius:" + radius );
-        System.out.println("Volume in gallons: " + getVolumeInCubicMeter());
+    public double getMaxWeight() {
+		return maxWeight;
+	}
+
+	public void setMaxWeight(double maxWeight) {
+		this.maxWeight = maxWeight;
+	}
+
+	public void printTruckInfo() {
+        System.out.printf("Truck length: %.1f m \n", length);
+		System.out.printf("Truck Radius: %.1f m \n", radius);
+        System.out.printf("Volume in gallons: %.2f m³\n", getTruckVolumeInCubicMeter());
     }
 
 }

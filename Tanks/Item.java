@@ -22,16 +22,39 @@ package Tanks;
  * @author Avdyrahman Agajykov
  */
 public class Item {
-
+	
 	public Item() {
 		
 	}
-
+	
     private String name;
 	private double riskFactor;
 	private double densityPerGallon; // kg per gallon
+	private double volumeInCubicMeter;
+	private double gallons;
+	
+	public void setGallons(double gallons) {
+		this.gallons = gallons;
+		calculateVolumeInCubicMeters();
+	}
 
-    public void setName(String name) {
+	/**
+	 * 1 US gallon = 3.78541 liters
+	 * 1 liter = 0.001 cubic meters
+	 * 
+	 * 1 gallon = 3.78541 * 0.001 = 0.00378541 cubic meters
+	 * @param gallons
+	 * @return
+	 */
+	public void calculateVolumeInCubicMeters() {
+		this.volumeInCubicMeter = this.gallons * 0.00378541;
+	}
+
+    public double getVolumeInCubicMeter() {
+		return this.volumeInCubicMeter;
+	}
+
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -47,23 +70,11 @@ public class Item {
     public String getName() { return name; }
     public double getDensityPerGallon() { return densityPerGallon; }
 
+	public void printItemInfo() {
+	System.out.println("Item: " + name);
+	System.out.println("Risk Factor: " + riskFactor);
+	System.out.println("Density (kg/gal): " + densityPerGallon);
 
-	/**
-	 * 1 US gallon = 3.78541 liters
-	 * 1 liter = 0.001 cubic meters
-	 * 
-	 * 1 gallon = 3.78541 * 0.001 = 0.00378541 cubic meters
-	 * @param gallons
-	 * @return
-	 */
-    public double volumeInCubicMeters(double gallons) {
-        return gallons * 0.00378541;
-    }
-
-    public void printItemInfo() {
-        System.out.println("Item: " + name);
-        System.out.println("Risk Factor: " + riskFactor);
-        System.out.println("Density (kg/gal): " + densityPerGallon);
     }
 }
 

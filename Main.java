@@ -67,19 +67,27 @@ public class Main {
 
         // Trucks
         Truck smallTruck = new Truck();
+		smallTruck.setName("Small");
 		smallTruck.setLength(5);
 		smallTruck.setRadius(0.8);
+		smallTruck.setMaxWeight(5000);
 		
         Truck mediumTruck = new Truck();
+		mediumTruck.setName("Medium");
 		mediumTruck.setLength(8);
 		mediumTruck.setRadius(1.2);
+		mediumTruck.setMaxWeight(10000);
 
         Truck largeTruck = new Truck();
+		largeTruck.setName("Large");
 		largeTruck.setLength(12);
 		largeTruck.setRadius(1.6);
+		largeTruck.setMaxWeight(20000);
 
         // Calculation
         Calculation calc = new Calculation();
+
+		calc.addTruck(smallTruck, mediumTruck, largeTruck);
 		
         calc.addItem(
 			benzeneSuperE95,
@@ -93,51 +101,55 @@ public class Main {
 			carbonDioxide,
 			methane
 			);
-
-
-		
 		
 		Scanner scanner = new Scanner(System.in);
 
 		boolean isOrderComplete = false;
 
-	while (!isOrderComplete) {
-		System.out.print("Provide amount of gallons: ");
-		int gallonAmount = Integer.parseInt(scanner.nextLine());
+		while (!isOrderComplete) {
+			System.out.print("Provide amount of gallons: ");
+			int gallonAmount = Integer.parseInt(scanner.nextLine());
 
-		System.out.print("Provide Item to be shipped: ");
-		String itemName = scanner.nextLine().trim();
+			System.out.print("Provide Item to be shipped: ");
+			String itemName = scanner.nextLine().trim();
 
-		System.out.print("Provide destination City: ");
-		String destinationCity = scanner.nextLine().trim();
+			System.out.print("Provide destination City: ");
+			String destinationCity = scanner.nextLine().trim();
 
-		Item itemToBeShipped;
-		try {
-			itemToBeShipped = Validation.toItem(itemName, calc.getItems());
-		} catch (ItemNotFoundException e) {
-			System.err.println(e.getMessage());
-			continue; // skip this order and ask again
+			Item itemToBeShipped;
+			try {
+				itemToBeShipped = Validation.checkIfItemExist(itemName, calc.getItems());
+			} 
+			catch (ItemNotFoundException e) {
+				System.err.println(e.getMessage());
+				continue; // skip this order and ask again
+			}
+
+			City city;
+			try {
+				city = Validation.checkIfCityExist(destinationCity);
+			} 
+			catch (CityNotFoundException e) {
+				System.err.println(e.getMessage());
+				continue;
+			}
+
+			Order order = new Order(gallonAmount, itemToBeShipped, city);
+			calc.addOrder(order);
+
+			double cost = calc.shippingPrice(order);
+			order.setShipmentCost(cost);
+			System.out.printf("Shipping Cost:%.2f€ \n",order.getShipmentCost());
+			double itemVolume = order.getItemToBeShipped().getVolumeInCubicMeter();
+			System.out.printf("Volume of item:%.2f m³ \n",itemVolume);
+
+			System.out.print("Do you want to finish ordering? (yes/no): ");
+			String response = scanner.nextLine().trim().toLowerCase();
+			isOrderComplete = response.equals("yes") || response.equals("y");
 		}
-
-		City city;
-		try {
-			city = Validation.toCityEnum(destinationCity);
-		} catch (CityNotFoundException e) {
-			System.err.println(e.getMessage());
-			continue;
-		}
-
-		Order order = new Order(gallonAmount, itemToBeShipped, city);
-		calc.addOrder(order);
-
-		// Optionally, show cost for each added order
-		double cost = calc.shippingPrice(order);
-		System.out.println("Shipping Cost: " + cost + " Euros");
-
-		System.out.print("Do you want to finish ordering? (yes/no): ");
-		String response = scanner.nextLine().trim().toLowerCase();
-		isOrderComplete = response.equals("yes") || response.equals("y");
-	}
 		calc.printOrder();
+		calc.findBestTruckCombo();
+		
+	// FIXME: 
     }
 }
