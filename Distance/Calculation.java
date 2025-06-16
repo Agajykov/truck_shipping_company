@@ -10,14 +10,14 @@ import java.util.List;
 public class Calculation {
 
 	// return cost/km
-	public static final double RETURN_COST_PER_KM = 0.6;
+	private static final double RETURN_COST_PER_KM = 0.6;
 
 	private List<Item> items = new ArrayList<>();
 	private List<Order> orders = new ArrayList<>();
 	private List<Truck> availableTrucks = new ArrayList<>();
 
 	public Calculation() {
-
+		
 	}
 
 	public void addItem(Item... newItems) {
@@ -54,48 +54,67 @@ public class Calculation {
 	}
 
 	public void findBestTruckCombo() {
-		for (Order order : this.orders) {
+		double itemTotalVolume;
+		double itemTotalWeight;
 
-			double itemTotalVolume = order.getItemToBeShipped().getVolumeInCubicMeter();
-			double itemTotalWeight = order.getItemToBeShipped().getDensityPerGallon() * order.getGallonAmmount();
-
-			availableTrucks.forEach(Truck::calculateVolume);
-
-			availableTrucks.sort((a, b) ->
-				Double.compare(b.getTruckVolumeInCubicMeter(), a.getTruckVolumeInCubicMeter()));
-
-			System.out.println("\nTruck Distribution Plan:");
-			double itemRemainingVolume = itemTotalVolume;
-			double itemRemainingWeight = itemTotalWeight;
-
-			for (Truck truck : availableTrucks) {
-				double truckVolume = truck.getTruckVolumeInCubicMeter();
-				double truckWeight = truck.getMaxWeight();
-				int count = 0;
-
-				// Use truck repeatedly as long as there's space/weight need
-				while (itemRemainingVolume >= truckVolume || itemRemainingWeight >= truckWeight) {
-					itemRemainingVolume -= Math.min(truckVolume, itemRemainingVolume);
-					itemRemainingWeight -= Math.min(truckWeight, itemRemainingWeight);
-					count++;
-
-					// Add a copy of the truck or reference to the truck
-					order.getTrucksUsed().add(truck);
-				}
-
-				if (count > 0) {
-					System.out.printf("%d x %s (%.2f m³, %.0f kg)\n", count, truck.getName(), truckVolume, truckWeight);
-				}
-			}
-
-			if (itemRemainingVolume > 0 || itemRemainingWeight > 0) {
-				System.out.printf("Remaining Volume: %.2f m³, Remaining Weight: %.2f kg\n", itemRemainingVolume, itemRemainingWeight);
-			} else {
-				System.out.println("All cargo allocated successfully.");
-			}
+		double truckVolume;
+		double truckWeight;
+		
+		for (Order order : orders) {
+			itemTotalVolume = order.getItemToBeShipped().getVolumeInCubicMeter();
+			itemTotalWeight = order.getItemToBeShipped().getDensityPerGallon() * order.getGallonAmmount();
 		}
-}
+		
+		for (Truck truck : availableTrucks) {
+			truckVolume = truck.getTruckVolumeInCubicMeter();
+			truckWeight = truck.getMaxWeight();
+		}
+		
+		
+		while ()
+		
+		// for (Order order : this.orders) {
 
+		// 	double itemTotalVolume = order.getItemToBeShipped().getVolumeInCubicMeter();
+		// 	double itemTotalWeight = order.getItemToBeShipped().getDensityPerGallon() * order.getGallonAmmount();
+
+		// 	availableTrucks.forEach(Truck::calculateVolume);
+
+		// 	availableTrucks.sort((a, b) ->
+		// 		Double.compare(b.getTruckVolumeInCubicMeter(), a.getTruckVolumeInCubicMeter()));
+
+		// 	System.out.println("\nTruck Distribution Plan:");
+		// 	double itemRemainingVolume = itemTotalVolume;
+		// 	double itemRemainingWeight = itemTotalWeight;
+
+		// 	for (Truck truck : availableTrucks) {
+		// 		double truckVolume = truck.getTruckVolumeInCubicMeter();
+		// 		double truckWeight = truck.getMaxWeight();
+		// 		int count = 0;
+
+		// 		// Use truck repeatedly as long as there's space/weight need
+		// 		while (itemRemainingVolume >= truckVolume || itemRemainingWeight >= truckWeight) {
+		// 			itemRemainingVolume -= Math.min(truckVolume, itemRemainingVolume);
+		// 			itemRemainingWeight -= Math.min(truckWeight, itemRemainingWeight);
+		// 			count++;
+
+		// 			// Add a copy of the truck or reference to the truck
+		// 			order.getTrucksUsed().add(truck);
+		// 		}
+
+		// 		if (count > 0) {
+		// 			System.out.printf("%d x %s (%.2f m³, %.0f kg)\n", count, truck.getName(), truckVolume, truckWeight);
+		// 		}
+		// 	}
+
+		// 	if (itemRemainingVolume > 0 || itemRemainingWeight > 0) {
+		// 		System.out.printf("Remaining Volume: %.2f m³, Remaining Weight: %.2f kg\n", itemRemainingVolume, itemRemainingWeight);
+		// 	} 
+		// 	else {
+		// 		System.out.println("All cargo allocated successfully.");
+		// 	}
+		// }
+	}
 
 	/**
 	 * Calculates the total shipping price for an order, including both

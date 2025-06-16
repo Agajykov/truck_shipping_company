@@ -3,6 +3,9 @@ import Enums.City;
 import Exceptions.CityNotFoundException;
 import Exceptions.ItemNotFoundException;
 import Orders.Order;
+import Tanker.LargeTruck;
+import Tanker.MediumTruck;
+import Tanker.SmallTruck;
 import Tanker.Truck;
 import Tanks.Item;
 import Tanks.Liquid;
@@ -66,19 +69,19 @@ public class Main {
 		methane.setDensityPerGallon(0.42);
 
         // Trucks
-        Truck smallTruck = new Truck();
+        Truck smallTruck = new SmallTruck();
 		smallTruck.setName("Small");
 		smallTruck.setLength(5);
 		smallTruck.setRadius(0.8);
 		smallTruck.setMaxWeight(5000);
 		
-        Truck mediumTruck = new Truck();
+        Truck mediumTruck = new MediumTruck();
 		mediumTruck.setName("Medium");
 		mediumTruck.setLength(8);
 		mediumTruck.setRadius(1.2);
 		mediumTruck.setMaxWeight(10000);
 
-        Truck largeTruck = new Truck();
+        Truck largeTruck = new LargeTruck();
 		largeTruck.setName("Large");
 		largeTruck.setLength(12);
 		largeTruck.setRadius(1.6);
@@ -141,7 +144,9 @@ public class Main {
 			order.setShipmentCost(cost);
 			System.out.printf("Shipping Cost:%.2f€ \n",order.getShipmentCost());
 			double itemVolume = order.getItemToBeShipped().getVolumeInCubicMeter();
-			System.out.printf("Volume of item:%.2f m³ \n",itemVolume);
+			double itemWeight = order.getItemToBeShipped().getWeightOfItemInKg();
+			System.out.printf("Volume of item:%.2f m³ \n", itemVolume);
+			System.out.printf("Weight of item:%.2f kg \n", itemWeight);
 
 			System.out.print("Do you want to finish ordering? (yes/no): ");
 			String response = scanner.nextLine().trim().toLowerCase();

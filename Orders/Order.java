@@ -45,6 +45,7 @@ public class Order {
 	//"3200 gallons of Oxygen to be shipped from Hamburg to Berlin"
 	public void getOrderReport() {
 		System.out.printf("%d gallons of %s is to be shipped from %s to %s \n", this.gallonAmmount, itemToBeShipped.getName() , this.cityToShip.HAMBURG, this.cityToShip );
+		System.out.println(this.trucksUsed.size());
 		System.out.println("Used trucks:" + trucksUsed.toString());
 	}
 

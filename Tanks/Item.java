@@ -23,21 +23,25 @@ package Tanks;
  */
 public class Item {
 	
-	public Item() {
-		
-	}
+	// Conversion factor from US gallons to liters.
+	private static final double CONVERSION_FACTOR = 3.78541;
 	
-    private String name;
+	private String name;
 	private double riskFactor;
 	private double densityPerGallon; // kg per gallon
 	private double volumeInCubicMeter;
 	private double gallons;
+	private double weightOfItemInKg;
+	
+	public Item() {
+		
+	}
 	
 	public void setGallons(double gallons) {
 		this.gallons = gallons;
 		calculateVolumeInCubicMeters();
 	}
-
+	
 	/**
 	 * 1 US gallon = 3.78541 liters
 	 * 1 liter = 0.001 cubic meters
@@ -49,10 +53,21 @@ public class Item {
 	public void calculateVolumeInCubicMeters() {
 		this.volumeInCubicMeter = this.gallons * 0.00378541;
 	}
-
+	
     public double getVolumeInCubicMeter() {
 		return this.volumeInCubicMeter;
 	}
+	
+	public void calculateWeightOfItem() {
+		double liter = this.gallons * CONVERSION_FACTOR;
+		this.weightOfItemInKg  = liter * this.densityPerGallon;
+	}
+
+
+	public double getWeightOfItemInKg() {
+		calculateWeightOfItem();
+        return this.weightOfItemInKg;
+    }
 
 	public void setName(String name) {
 		this.name = name;

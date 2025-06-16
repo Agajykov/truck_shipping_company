@@ -1,12 +1,15 @@
 package Tanker;
 
-public class Truck {
+public abstract class Truck {
 	private String name;
     private double length;
 	private double radius;
 	private double volumeInCubicMeter;
 	private double maxWeight;
 	
+
+	public abstract void displayTruckInfo();
+
 	public void calculateVolume() {
 		double volume = Math.PI * Math.pow(this.radius, 2) * this.length;
 		this.volumeInCubicMeter = volume;
@@ -21,9 +24,7 @@ public class Truck {
 	}
 
 	public double getTruckVolumeInCubicMeter() {
-		if (this.volumeInCubicMeter == 0.0) {
-       		calculateVolume();
-    	}
+       	calculateVolume();
     	return this.volumeInCubicMeter;
 	}
 
@@ -54,7 +55,7 @@ public class Truck {
 	public void printTruckInfo() {
         System.out.printf("Truck length: %.1f m \n", length);
 		System.out.printf("Truck Radius: %.1f m \n", radius);
-        System.out.printf("Volume in gallons: %.2f m³\n", getTruckVolumeInCubicMeter());
+        System.out.printf("Volume in cubic meters: %.2f m³\n", getTruckVolumeInCubicMeter());
     }
 
 }
