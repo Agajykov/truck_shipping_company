@@ -8,7 +8,7 @@ public abstract class Truck {
 	private double maxWeight;
 	
 
-	public abstract void displayTruckInfo();
+	public abstract void displayTruckDescription();
 
 	public void calculateVolume() {
 		double volume = Math.PI * Math.pow(this.radius, 2) * this.length;

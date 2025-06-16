@@ -9,7 +9,7 @@ public class LargeTruck extends Truck {
 	}
 
 	@Override
-	public void displayTruckInfo() {
+	public void displayTruckDescription() {
 		System.out.println("This Large Truck is dedicated to transport Large ammount of shipments");
 	}
 	

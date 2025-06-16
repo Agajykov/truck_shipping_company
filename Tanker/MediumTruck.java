@@ -8,7 +8,7 @@ public class MediumTruck extends Truck {
 	}
 
 	@Override
-	public void displayTruckInfo() {
+	public void displayTruckDescription() {
 		System.out.println("This Medium Size Truck is dedicated to shipp middle size volume elements");
 	}
 }
