@@ -1,6 +1,11 @@
 package Tanker;
 
 public class MediumTruck extends Truck {
+
+	public MediumTruck(String name, double length, double radius, double maxWeight) {
+		super(name, length, radius, maxWeight);
+	}
+
 	@Override
 	public void printTruckInfo() {
 		System.out.println("Truck Type: Medium");

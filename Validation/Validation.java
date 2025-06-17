@@ -15,7 +15,7 @@ public class Validation {
 			throw new CityNotFoundException("Invalid city name: " + cityName, e);
 		}
 	}
-	public static Item checkIfItemExist(String inputName, List<Item> allItems) throws ItemNotFoundException {
+	public static Item checkIfItemExistsInStock(String inputName, List<Item> allItems) throws ItemNotFoundException {
 		for (Item item : allItems) {
 			if (item.getName().equalsIgnoreCase(inputName.trim())) {
 				return item;

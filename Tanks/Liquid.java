@@ -8,7 +8,16 @@ package Tanks;
  * Milk
  */
 public class Liquid extends Item {
-    public Liquid() {
-       
-    }
+	private String typeOfItem = "Liquid";
+	public Liquid(String name, double riskFactor, double densityPerGallon) {
+		super(name, riskFactor, densityPerGallon);
+	}
+	
+	@Override
+	public String typeOfItem() {
+		return this.typeOfItem;
+	}
+    
+
+
 }

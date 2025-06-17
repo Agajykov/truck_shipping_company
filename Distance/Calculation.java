@@ -11,109 +11,47 @@ public class Calculation {
 
 	// return cost/km
 	private static final double RETURN_COST_PER_KM = 0.6;
-
+	
+	public Calculation() { }
+	
 	private List<Item> items = new ArrayList<>();
-	private List<Order> orders = new ArrayList<>();
 	private List<Truck> availableTrucks = new ArrayList<>();
-
-	public Calculation() {
-		
-	}
+	private List<Order> orders = new ArrayList<>();
 
 	public void addItem(Item... newItems) {
-			this.items.addAll(Arrays.asList(newItems));
+		this.items.addAll(Arrays.asList(newItems));
+	}
+
+	public List<Item> getItems() {
+		return this.items;
 	}
 
 	public void addTruck(Truck... newTrucks) {
-			this.availableTrucks.addAll(Arrays.asList(newTrucks));
+		this.availableTrucks.addAll(Arrays.asList(newTrucks));
 	}
 
-	/**
-	 * The size of the Truck container is assumed to be cylindrical in this program.
-	 * 
-	 * CylinderVolume = pi * r^2 * L
-	 * 
-	 * Computational unit is in meters
-	 * 
-	 * @return double
-	 */
-	public double totalVolumeOfTruck(Truck tanker) {
-
-		double radiusMeter = tanker.getRadius();
-		double lengthMeter = tanker.getLength();
-		double volumeInCubicMeter = Math.PI * Math.pow(radiusMeter, 2) * lengthMeter;
-		return volumeInCubicMeter;
+	public List<Truck> getAvailableTrucks() {
+		return this.availableTrucks;
 	}
 
 	public void addOrder(Order order) {
 		this.orders.add(order);
 	}
 
-	public List<Item> getItems() {
-		return  this.items;
+	public double totalVolumeOfTruck(Truck tanker) {
+		for (Truck truck : this.availableTrucks)
+			if (tanker.getName().equals(truck.getName())) {
+				return tanker.getTruckVolumeInCubicMeter();
+			}
+		return 0;
 	}
 
-	public void findBestTruckCombo() {
-		double itemTotalVolume;
-		double itemTotalWeight;
-
-		double truckVolume;
-		double truckWeight;
-		
-		for (Order order : orders) {
-			itemTotalVolume = order.getItemToBeShipped().getVolumeInCubicMeter();
-			itemTotalWeight = order.getItemToBeShipped().getDensityPerGallon() * order.getGallonAmmount();
-		}
-		
-		for (Truck truck : availableTrucks) {
-			truckVolume = truck.getTruckVolumeInCubicMeter();
-			truckWeight = truck.getMaxWeight();
-		}
-		
-		
-		while ()
-		
-		// for (Order order : this.orders) {
-
-		// 	double itemTotalVolume = order.getItemToBeShipped().getVolumeInCubicMeter();
-		// 	double itemTotalWeight = order.getItemToBeShipped().getDensityPerGallon() * order.getGallonAmmount();
-
-		// 	availableTrucks.forEach(Truck::calculateVolume);
-
-		// 	availableTrucks.sort((a, b) ->
-		// 		Double.compare(b.getTruckVolumeInCubicMeter(), a.getTruckVolumeInCubicMeter()));
-
-		// 	System.out.println("\nTruck Distribution Plan:");
-		// 	double itemRemainingVolume = itemTotalVolume;
-		// 	double itemRemainingWeight = itemTotalWeight;
-
-		// 	for (Truck truck : availableTrucks) {
-		// 		double truckVolume = truck.getTruckVolumeInCubicMeter();
-		// 		double truckWeight = truck.getMaxWeight();
-		// 		int count = 0;
-
-		// 		// Use truck repeatedly as long as there's space/weight need
-		// 		while (itemRemainingVolume >= truckVolume || itemRemainingWeight >= truckWeight) {
-		// 			itemRemainingVolume -= Math.min(truckVolume, itemRemainingVolume);
-		// 			itemRemainingWeight -= Math.min(truckWeight, itemRemainingWeight);
-		// 			count++;
-
-		// 			// Add a copy of the truck or reference to the truck
-		// 			order.getTrucksUsed().add(truck);
-		// 		}
-
-		// 		if (count > 0) {
-		// 			System.out.printf("%d x %s (%.2f m³, %.0f kg)\n", count, truck.getName(), truckVolume, truckWeight);
-		// 		}
-		// 	}
-
-		// 	if (itemRemainingVolume > 0 || itemRemainingWeight > 0) {
-		// 		System.out.printf("Remaining Volume: %.2f m³, Remaining Weight: %.2f kg\n", itemRemainingVolume, itemRemainingWeight);
-		// 	} 
-		// 	else {
-		// 		System.out.println("All cargo allocated successfully.");
-		// 	}
-		// }
+	public double totalWeighteOfTruck(Truck tanker) {
+		for (Truck truck : this.availableTrucks)
+			if (tanker.getName().equals(truck.getName())) {
+				return tanker.getMaxWeight();
+			}
+		return 0;
 	}
 
 	/**
@@ -152,6 +90,56 @@ public class Calculation {
 
 		return cost + returnCost;
 	}
+
+	
+
+	
+
+	public void findBestTruckCombo(Order order) {
+		double itemRemainingVolume = order.getItemToBeShipped().getVolumeInCubicMeter();
+		double itemRemainingWeight = order.getItemToBeShipped().getWeightOfItemInKg();
+
+		// Sort trucks: bigger volume first
+		availableTrucks.sort((a, b) -> 
+			Double.compare(b.getTruckVolumeInCubicMeter(), a.getTruckVolumeInCubicMeter()));
+
+		System.out.println("\nTruck Distribution Plan for Order to " + order.getCityToShip() + ":");
+
+		for (Truck truck : availableTrucks) {
+			double truckVolume = truck.getTruckVolumeInCubicMeter();
+			double truckWeight = truck.getMaxWeight();
+			int count = 0;
+
+			// Use this truck repeatedly as long as there's item left
+			while ((itemRemainingVolume >= 0.0001 && itemRemainingVolume >= truckVolume * 0.9) ||
+				(itemRemainingWeight >= 0.0001 && itemRemainingWeight >= truckWeight * 0.9)) {
+
+				// Remove volume & weight used
+				itemRemainingVolume -= Math.min(truckVolume, itemRemainingVolume);
+				itemRemainingWeight -= Math.min(truckWeight, itemRemainingWeight);
+				count++;
+
+				// Add truck used to order (if your Order class has getTrucksUsed() list)
+				order.getTrucksUsed().add(truck);
+			}
+
+			if (count > 0) {
+				System.out.printf("%d x %s (%.2f m³, %.0f kg)\n", 
+					count, truck.getName(), truckVolume, truckWeight);
+			}
+		}
+
+		// If remaining item left, warn the user
+		if (itemRemainingVolume > 0.01 || itemRemainingWeight > 0.01) {
+			System.out.printf("Remaining: %.2f m³, %.2f kg (Not fully allocated!)\n", 
+				itemRemainingVolume, itemRemainingWeight);
+		} 
+		else {
+			System.out.println("All cargo allocated successfully.");
+		}
+	}
+
+	
 
 	/**
 	 * Prints the report for each order in the current list of orders.

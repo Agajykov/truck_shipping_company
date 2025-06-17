@@ -6,14 +6,18 @@ public abstract class Truck {
 	private double radius;
 	private double volumeInCubicMeter;
 	private double maxWeight;
+
+	// Constructor
+    public Truck(String name, double length, double radius, double maxWeight) {
+        this.name = name;
+        this.length = length;
+        this.radius = radius;
+        this.maxWeight = maxWeight;
+        calculateVolume();  // Always update volume
+    }
 	
 
 	public abstract void displayTruckDescription();
-
-	public void calculateVolume() {
-		double volume = Math.PI * Math.pow(this.radius, 2) * this.length;
-		this.volumeInCubicMeter = volume;
-	}
     
 	public String getName() {
 		return name;
@@ -23,19 +27,14 @@ public abstract class Truck {
 		this.name = name;
 	}
 
-	public double getTruckVolumeInCubicMeter() {
-       	calculateVolume();
-    	return this.volumeInCubicMeter;
-	}
-
 	public double getLength() {
 		return length;
 	}
-
+	
 	public void setLength(int length) {
 		this.length = length;
 	}
-
+	
 	public double getRadius() {
 		return radius;
 	}
@@ -43,13 +42,23 @@ public abstract class Truck {
 	public void setRadius(double radius) {
 		this.radius = radius;
 	}
-
+	
     public double getMaxWeight() {
 		return maxWeight;
 	}
-
+	
 	public void setMaxWeight(double maxWeight) {
 		this.maxWeight = maxWeight;
+	}
+
+	public double getTruckVolumeInCubicMeter() {
+		calculateVolume();
+		return this.volumeInCubicMeter;
+	}
+	
+	public void calculateVolume() {
+		double volume = Math.PI * Math.pow(this.radius, 2) * this.length;
+		this.volumeInCubicMeter = volume;
 	}
 
 	public void printTruckInfo() {

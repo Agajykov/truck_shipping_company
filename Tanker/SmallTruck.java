@@ -1,6 +1,12 @@
 package Tanker;
 
 public class SmallTruck extends Truck {
+
+	public SmallTruck(String name, double length, double radius, double maxWeight) {
+		super(name, length, radius, maxWeight);
+		//TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public void printTruckInfo() {
 		System.out.println("Truck Type: Small");

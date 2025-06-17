@@ -21,10 +21,10 @@ package Tanks;
  *
  * @author Avdyrahman Agajykov
  */
-public class Item {
+public abstract class Item {
 	
-	// Conversion factor from US gallons to liters.
-	private static final double CONVERSION_FACTOR = 3.78541;
+	// Conversion factor from US gallons to cubic meter.
+	private static final double CONVERSION_FACTOR = 0.00378541;
 	
 	private String name;
 	private double riskFactor;
@@ -33,10 +33,40 @@ public class Item {
 	private double gallons;
 	private double weightOfItemInKg;
 	
-	public Item() {
-		
+
+	public abstract String typeOfItem();
+
+	public Item(String name, double riskFactor, double densityPerGallon) {
+		this.name = name;
+		this.riskFactor = riskFactor;
+		this.densityPerGallon = densityPerGallon;
 	}
-	
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setRiskFactor(double riskFactor) {
+		this.riskFactor = riskFactor;
+	}
+
+	public double getRiskFactor() {
+		return riskFactor;
+	}
+
+	public void setDensityPerGallon(double densityPerGallon) {
+		this.densityPerGallon = densityPerGallon;
+	}
+
+	public double getDensityPerGallon() {
+		return densityPerGallon;
+	}
+
+
 	public void setGallons(double gallons) {
 		this.gallons = gallons;
 		calculateVolumeInCubicMeters();
@@ -51,46 +81,31 @@ public class Item {
 	 * @return
 	 */
 	public void calculateVolumeInCubicMeters() {
-		this.volumeInCubicMeter = this.gallons * 0.00378541;
+		this.volumeInCubicMeter = this.gallons * CONVERSION_FACTOR;
 	}
 	
-    public double getVolumeInCubicMeter() {
+	public double getVolumeInCubicMeter() {
 		return this.volumeInCubicMeter;
 	}
 	
 	public void calculateWeightOfItem() {
-		double liter = this.gallons * CONVERSION_FACTOR;
-		this.weightOfItemInKg  = liter * this.densityPerGallon;
+		this.weightOfItemInKg  = this.gallons * this.densityPerGallon;
 	}
-
 
 	public double getWeightOfItemInKg() {
-		calculateWeightOfItem();
-        return this.weightOfItemInKg;
-    }
-
-	public void setName(String name) {
-		this.name = name;
+		calculateWeightOfItem();	
+		return this.weightOfItemInKg;
 	}
-
-	public void setRiskFactor(double riskFactor) {
-		this.riskFactor = riskFactor;
-	}
-
-	public void setDensityPerGallon(double densityPerGallon) {
-		this.densityPerGallon = densityPerGallon;
-	}
-
-    public double getRiskFactor() { return riskFactor; }
-    public String getName() { return name; }
-    public double getDensityPerGallon() { return densityPerGallon; }
 
 	public void printItemInfo() {
 	System.out.println("Item: " + name);
+	System.out.println("Material of Item:" + typeOfItem());
 	System.out.println("Risk Factor: " + riskFactor);
 	System.out.println("Density (kg/gal): " + densityPerGallon);
-
-    }
+	System.out.println("Gallons: " + gallons);
+	System.out.println("Volume (m^3): " + getVolumeInCubicMeter());
+	System.out.println("Weight (kg): " + getWeightOfItemInKg());
+	}
 }
 
 
