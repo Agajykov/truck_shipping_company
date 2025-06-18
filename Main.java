@@ -3,6 +3,7 @@ import Enums.City;
 import Exceptions.CityNotFoundException;
 import Exceptions.ItemNotFoundException;
 import Orders.Order;
+import Orders.OrderService;
 import Tanker.LargeTruck;
 import Tanker.MediumTruck;
 import Tanker.SmallTruck;
@@ -57,6 +58,8 @@ public class Main {
 			carbonDioxide,
 			methane
 			);
+
+		OrderService orderService = new OrderService(calc);	
 		
 		Scanner scanner = new Scanner(System.in);
 
@@ -72,42 +75,24 @@ public class Main {
 
 			System.out.print("Provide destination City: ");
 			String destinationCity = scanner.nextLine().trim();
-
-			Item itemToBeShipped;
-			final List<Item> existingItemsInStock = calc.getItems();
-
+		
 			try {
-				itemToBeShipped = Validation.checkIfItemExistsInStock(desiredItemToShip, existingItemsInStock);
+
+				Item itemToBeShipped = Validation.checkIfItemExistsInStock(desiredItemToShip, calc.getItems());
+				City city = Validation.checkIfCityExist(destinationCity);
+
+				orderService.createOrder(gallonAmount, itemToBeShipped, city);
 			} 
-			catch (ItemNotFoundException e) {
+			catch (ItemNotFoundException | CityNotFoundException e) {
 				System.err.println(e.getMessage());
 				continue; // skip this order and ask again
 			}
-
-			City city;
-			try {
-				city = Validation.checkIfCityExist(destinationCity);
-			} 
-			catch (CityNotFoundException e) {
-				System.err.println(e.getMessage());
-				continue;
-			}
-
-			Order order = new Order(gallonAmount, itemToBeShipped, city);
-			calc.addOrder(order);
-
-			double cost = calc.shippingPrice(order);
-			order.setShipmentCost(cost);
-			System.out.printf("Shipping Cost:%.2f€ \n",order.getShipmentCost());
-			calc.findBestTruckCombo(order);
-			
 
 			System.out.print("Do you want to finish ordering? (yes/no): ");
 			String response = scanner.nextLine().trim().toLowerCase();
 			isOrderComplete = response.equals("yes") || response.equals("y");
 		}
-		calc.printOrder();
-		
-	// FIXME: 
+
+		orderService.getOrders().forEach(Order::getOrderReport);
     }
 }

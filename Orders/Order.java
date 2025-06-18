@@ -14,11 +14,14 @@ public class Order {
 	private double shipmentCost;
 	private List<Truck> trucksUsed; 
 	
-	public Order(int gallonAmmount, Item item, City city) {
+	public Order(int gallonAmmount, Item item, City city, double shipmentCost, List<Truck> suitableTrucks) {
 		this.gallonAmmount = gallonAmmount;
 		this.itemToBeShipped = item;
 		this.cityToShip = city;
 		this.trucksUsed = new ArrayList<>();
+		this.shipmentCost = shipmentCost;
+		this.trucksUsed = suitableTrucks;
+
 		item.setGallons(gallonAmmount);
 	}
 
